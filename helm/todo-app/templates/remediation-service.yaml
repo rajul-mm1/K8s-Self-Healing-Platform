@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: remediation-engine
+  namespace: {{ .Values.namespace }}
+spec:
+  selector: { app: remediation-engine }
+  ports:
+    - port: {{ .Values.remediation.port }}
+      targetPort: {{ .Values.remediation.port }}

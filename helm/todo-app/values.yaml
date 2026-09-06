@@ -1,0 +1,47 @@
+namespace: todo-app
+
+image:
+  registry: ""            # e.g. 123456789012.dkr.ecr.ap-south-1.amazonaws.com
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+frontend:
+  replicaCount: 2
+  port: 8080
+  resources:
+    requests: { cpu: 50m, memory: 64Mi }
+    limits:   { cpu: 200m, memory: 128Mi }
+
+backend:
+  replicaCount: 2
+  port: 5000
+  resources:
+    requests: { cpu: 100m, memory: 128Mi }
+    limits:   { cpu: 300m, memory: 256Mi }
+  env:
+    MONGO_URI: "mongodb://mongodb:27017/tododb"
+
+mongodb:
+  port: 27017
+  storage: 2Gi
+  storageClassName: gp2
+  resources:
+    requests: { cpu: 100m, memory: 128Mi }
+    limits:   { cpu: 300m, memory: 256Mi }
+
+remediation:
+  replicaCount: 1
+  port: 8080
+  resources:
+    requests: { cpu: 50m, memory: 64Mi }
+    limits:   { cpu: 200m, memory: 128Mi }
+  maxAttempts: 3
+  attemptWindowSeconds: 1800
+  verifyDelaySeconds: 20
+  webhookSecret: ""   # set via --set or a Secret in real use; empty disables auth (demo only)
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 70

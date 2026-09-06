@@ -1,0 +1,34 @@
+{
+  "title": "Self-Healing Todo Platform",
+  "uid": "self-healing-todo",
+  "timezone": "browser",
+  "panels": [
+    {
+      "id": 1, "title": "Pod Restarts (todo-app)", "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [{ "expr": "sum(kube_pod_container_status_restarts_total{namespace=\"todo-app\"}) by (pod)" }]
+    },
+    {
+      "id": 2, "title": "Available Replicas by Deployment", "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [{ "expr": "kube_deployment_status_replicas_available{namespace=\"todo-app\"}" }]
+    },
+    {
+      "id": 3, "title": "CPU Usage vs Limit (%)", "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [{ "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"todo-app\"}[5m])) by (pod) / sum(kube_pod_container_resource_limits{namespace=\"todo-app\", resource=\"cpu\"}) by (pod)" }]
+    },
+    {
+      "id": 4, "title": "Failed Jobs", "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [{ "expr": "kube_job_status_failed{namespace=\"todo-app\"}" }]
+    },
+    {
+      "id": 5, "title": "Node Ready Status", "type": "timeseries",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
+      "targets": [{ "expr": "kube_node_status_condition{condition=\"Ready\", status=\"true\"}" }]
+    }
+  ],
+  "schemaVersion": 39,
+  "version": 1
+}

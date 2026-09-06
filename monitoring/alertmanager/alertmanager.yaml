@@ -1,0 +1,20 @@
+# Alertmanager configuration. Applied as the `alertmanager.yaml` key of the
+# Secret kube-prometheus-stack expects (see explaination.md for the exact
+# kubectl command). Routes every alert straight to the remediation engine's
+# webhook; Alertmanager still handles grouping/dedup so the engine only
+# receives one webhook call per distinct firing alert.
+route:
+  receiver: remediation-engine
+  group_by: ["alertname", "namespace"]
+  group_wait: 10s
+  group_interval: 30s
+  repeat_interval: 15m
+
+receivers:
+  - name: remediation-engine
+    webhook_configs:
+      - url: "http://remediation-engine.todo-app.svc.cluster.local:8080/webhook"
+        send_resolved: true
+        http_config:
+          # If remediation.webhookSecret is set in Helm values, add a
+          # matching Authorization/X-Webhook-Secret header here.

@@ -1,0 +1,268 @@
+# ============================================================
+
+# Self-Healing Kubernetes Platform
+
+# ============================================================
+
+# -------------------------
+
+# Terraform
+
+# -------------------------
+
+# Terraform working directory
+
+**/.terraform/*
+.terraform/
+
+# Terraform state files
+
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Terraform crash logs
+
+crash.log
+crash.*.log
+
+# Terraform variable files (may contain secrets)
+
+*.tfvars
+*.tfvars.json
+
+# Keep example variable files
+
+!*.tfvars.example
+
+# Terraform override files
+
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform CLI configuration
+
+.terraformrc
+terraform.rc
+
+# Terraform plan files
+
+*.tfplan
+*.plan
+
+# -------------------------
+
+# Kubernetes
+
+# -------------------------
+
+# Local Kubernetes configuration
+
+.kube/
+kubeconfig
+kubeconfig.yaml
+
+# Kubernetes secrets/config generated locally
+
+*-secret.yaml
+*-secret.yml
+
+# Local Helm output
+
+helm-output/
+rendered-manifests/
+
+# -------------------------
+
+# Environment / Secrets
+
+# -------------------------
+
+.env
+.env.*
+!.env.example
+!.env.sample
+
+*.secret
+*.secrets
+secrets/
+credentials/
+*.pem
+*.key
+*.crt
+
+# -------------------------
+
+# Node.js / React
+
+# -------------------------
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+.npm/
+.yarn/
+.pnpm-store/
+
+# Build output
+
+dist/
+build/
+.next/
+out/
+
+# React/Vite cache
+
+.vite/
+
+# -------------------------
+
+# Python
+
+# -------------------------
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+
+.venv/
+venv/
+env/
+ENV/
+
+# Python packaging
+
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Testing / coverage
+
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Type checking
+
+.mypy_cache/
+.pyre/
+.ruff_cache/
+
+# -------------------------
+
+# Docker
+
+# -------------------------
+
+# Local Docker environment files
+
+docker-compose.override.yml
+docker-compose.local.yml
+
+# Docker credentials
+
+.docker/
+
+# -------------------------
+
+# GitHub Actions
+
+# -------------------------
+
+# Local GitHub Actions artifacts
+
+.github/local/
+.github/secrets/
+
+# -------------------------
+
+# Monitoring / Logs
+
+# -------------------------
+
+*.log
+logs/
+
+# Prometheus local data
+
+prometheus-data/
+
+# Grafana local data
+
+grafana-data/
+
+# -------------------------
+
+# IDE / Editors
+
+# -------------------------
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# VS Code local settings
+
+.vscode/settings.json
+.vscode/launch.json
+
+# -------------------------
+
+# OS Generated Files
+
+# -------------------------
+
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# -------------------------
+
+# Temporary / Backup Files
+
+# -------------------------
+
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+
+# Temporary files
+
+tmp/
+temp/
+
+# -------------------------
+
+# Local Project Artifacts
+
+# -------------------------
+
+*.zip
+*.tar
+*.tar.gz
+
+# Screenshots / recordings
+
+*.png
+*.jpg
+*.jpeg
+*.mp4
+
+# Local test output
+
+coverage/
+reports/
+

@@ -1,0 +1,64 @@
+# PrometheusRule CRD -- deploy after kube-prometheus-stack is installed:
+#   kubectl apply -f monitoring/prometheus/alert-rules.yaml
+#
+# Alertname values here match remediation/remediation_engine.py's HANDLERS
+# dict exactly; that mapping is the contract between "what Prometheus can
+# detect" and "what the remediation engine knows how to fix".
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: self-healing-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: self-healing.rules
+      rules:
+        - alert: CrashLoopBackOff
+          expr: |
+            kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff", namespace="todo-app"} == 1
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Pod {{ $labels.pod }} is in CrashLoopBackOff"
+
+        - alert: KubernetesDeploymentReplicasMismatch
+          expr: |
+            kube_deployment_status_replicas_available{namespace="todo-app"} == 0
+            and kube_deployment_spec_replicas{namespace="todo-app"} > 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Deployment {{ $labels.deployment }} has zero available replicas"
+
+        - alert: KubernetesJobFailed
+          expr: |
+            kube_job_status_failed{namespace="todo-app"} > 0
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Job {{ $labels.job_name }} has failed"
+
+        - alert: HighCPUUsage
+          expr: |
+            sum(rate(container_cpu_usage_seconds_total{namespace="todo-app"}[5m])) by (pod)
+            / sum(kube_pod_container_resource_limits{namespace="todo-app", resource="cpu"}) by (pod)
+            > 0.85
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod {{ $labels.pod }} CPU usage above 85% of its limit"
+
+        - alert: KubernetesNodeNotReady
+          expr: |
+            kube_node_status_condition{condition="Ready", status="true"} == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Node {{ $labels.node }} is NotReady"

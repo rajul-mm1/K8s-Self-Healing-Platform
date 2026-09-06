@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: remediation-engine
+  namespace: {{ .Values.namespace }}
+  labels: { app: remediation-engine }
+spec:
+  replicas: {{ .Values.remediation.replicaCount }}
+  selector:
+    matchLabels: { app: remediation-engine }
+  template:
+    metadata:
+      labels: { app: remediation-engine }
+    spec:
+      serviceAccountName: remediation-engine
+      containers:
+        - name: remediation-engine
+          image: {{ include "todo-app.image" (dict "root" . "name" "remediation-engine") }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.remediation.port }}
+          env:
+            - name: TARGET_NAMESPACE
+              value: {{ .Values.namespace | quote }}
+            - name: MAX_REMEDIATION_ATTEMPTS
+              value: {{ .Values.remediation.maxAttempts | quote }}
+            - name: ATTEMPT_WINDOW_SECONDS
+              value: {{ .Values.remediation.attemptWindowSeconds | quote }}
+            - name: VERIFY_DELAY_SECONDS
+              value: {{ .Values.remediation.verifyDelaySeconds | quote }}
+            - name: WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: remediation-secret
+                  key: webhook-secret
+                  optional: true
+          resources:
+            {{- toYaml .Values.remediation.resources | nindent 12 }}
+          readinessProbe:
+            httpGet: { path: /health, port: {{ .Values.remediation.port }} }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: {{ .Values.remediation.port }} }
+            initialDelaySeconds: 10
+            periodSeconds: 20

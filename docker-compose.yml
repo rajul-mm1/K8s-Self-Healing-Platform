@@ -1,0 +1,35 @@
+# Local development only — NOT used for the EKS deployment (that's Helm).
+# Lets you run frontend + backend + mongo + remediation engine on your
+# laptop with `docker compose up` to sanity-check the app before touching AWS.
+version: "3.9"
+services:
+  mongodb:
+    image: mongo:7.0
+    ports: ["27017:27017"]
+    volumes: ["mongo-data:/data/db"]
+
+  backend:
+    build: ./app/backend
+    ports: ["5000:5000"]
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/tododb
+    depends_on: [mongodb]
+
+  frontend:
+    build: ./app/frontend
+    ports: ["3000:8080"]
+    environment:
+      API_BASE_URL: http://localhost:5000/api
+    depends_on: [backend]
+
+  remediation:
+    build: ./remediation
+    ports: ["8080:8080"]
+    environment:
+      TARGET_NAMESPACE: todo-app
+      LOG_LEVEL: DEBUG
+    # Note: outside a real cluster this has no Kubernetes API to reach;
+    # it's included here only so `docker compose build` validates the image.
+
+volumes:
+  mongo-data:

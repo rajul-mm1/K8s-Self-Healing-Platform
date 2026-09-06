@@ -1,0 +1,31 @@
+# Values file for the kube-prometheus-stack Helm chart (installed as a
+# dependency, not built from scratch -- Prometheus/Alertmanager/Grafana are
+# operational tooling, not part of this project's original code).
+#
+# helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+# helm install monitoring prometheus-community/kube-prometheus-stack \
+#   -n monitoring --create-namespace -f monitoring/prometheus/values.yaml
+
+alertmanager:
+  alertmanagerSpec:
+    resources:
+      requests: { cpu: 50m, memory: 64Mi }
+      limits:   { cpu: 200m, memory: 128Mi }
+  config: {}   # replaced by monitoring/alertmanager/alertmanager.yaml, see explaination.md
+
+prometheus:
+  prometheusSpec:
+    resources:
+      requests: { cpu: 200m, memory: 256Mi }
+      limits:   { cpu: 500m, memory: 512Mi }
+    retention: 6h          # short retention keeps storage cost minimal for a demo
+    additionalScrapeConfigs: []
+    ruleSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+
+grafana:
+  adminPassword: "changeme"   # override in a real deployment via --set or a Secret
+  resources:
+    requests: { cpu: 50m, memory: 96Mi }
+    limits:   { cpu: 200m, memory: 192Mi }
+  defaultDashboardsEnabled: true
