@@ -1,5 +1,6 @@
 const express = require('express');
 const Todo = require('../models/Todo');
+const { isValidTitle } = require('../utils/validateTodo');
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const { title } = req.body;
-  if (!title || !title.trim()) {
+  if (!isValidTitle(title)) {
     return res.status(400).json({ error: 'title is required' });
   }
   const todo = await Todo.create({ title: title.trim() });
