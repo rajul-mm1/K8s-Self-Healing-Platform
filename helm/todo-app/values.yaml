@@ -1,7 +1,7 @@
 namespace: todo-app
 
 image:
-  registry: ""            # e.g. 123456789012.dkr.ecr.ap-south-1.amazonaws.com
+  registry: ""            # e.g. 123456789012.dkr.ecr.us-west-2.amazonaws.com
   tag: "latest"
   pullPolicy: IfNotPresent
 

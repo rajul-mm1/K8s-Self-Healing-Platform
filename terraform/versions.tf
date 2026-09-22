@@ -16,7 +16,7 @@ terraform {
   # backend "s3" {
   #   bucket = "your-terraform-state-bucket"
   #   key    = "self-healing-k8s/terraform.tfstate"
-  #   region = "ap-south-1"
+  #   region = "us-west-2"
   # }
 }
 

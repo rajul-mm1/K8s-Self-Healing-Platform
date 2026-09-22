@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "AWS region for all resources"
   type        = string
-  default     = "ap-south-1"
+  default     = "us-west-2"
 }
 
 variable "project_name" {
@@ -28,13 +28,13 @@ variable "vpc_cidr" {
 variable "availability_zones" {
   description = "AZs to spread subnets across"
   type        = list(string)
-  default     = ["ap-south-1a", "ap-south-1b"]
+  default     = ["us-west-2a", "us-west-2b"]
 }
 
 variable "node_instance_type" {
   description = "EC2 instance type for EKS worker nodes"
   type        = string
-  default     = "t3.medium"
+  default     = "t3.micro"
 }
 
 # Small, cost-conscious node group: min 1 keeps costs low when idle,

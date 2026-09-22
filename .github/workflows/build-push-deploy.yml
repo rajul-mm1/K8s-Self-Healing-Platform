@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 env:
-  AWS_REGION: ap-south-1
+  AWS_REGION: us-west-2
   EKS_CLUSTER_NAME: self-healing-k8s-eks
 
 jobs:

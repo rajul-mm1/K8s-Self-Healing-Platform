@@ -98,7 +98,7 @@ terraform plan
 terraform apply
 
 # 2. Point kubectl at the new cluster
-aws eks update-kubeconfig --region ap-south-1 --name self-healing-k8s-eks
+aws eks update-kubeconfig --region us-west-2 --name self-healing-k8s-eks
 
 # 3. Install the monitoring stack (Prometheus/Alertmanager/Grafana)
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -119,8 +119,8 @@ kubectl create secret generic alertmanager-monitoring-kube-prometheus-alertmanag
 git push origin main
 
 # --- OR deploy the app manually the first time, before CI/CD is wired up: ---
-ECR_REGISTRY="<account-id>.dkr.ecr.ap-south-1.amazonaws.com"
-aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
+ECR_REGISTRY="<account-id>.dkr.ecr.us-west-2.amazonaws.com"
+aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
 for svc in frontend:app/frontend backend:app/backend remediation-engine:remediation; do
   name="${svc%%:*}"; path="${svc##*:}"
   repo_name=$( [ "$name" = "frontend" ] && echo todo-frontend || ( [ "$name" = "backend" ] && echo todo-backend || echo remediation-engine ) )

@@ -4,7 +4,7 @@ the errors i faced during creation of this project
 2. "GitHub Actions OIDC provider already exists in your AWS account, but Terraform doesn't know about it" - i fixed this by importing the existing aws resource.
 
     solution - ```terraform import aws_iam_openid_connect_provider.github \
-arn:aws:iam::161805283944:oidc-provider/token.actions.githubusercontent.com```
+"arn:aws:iam::478815938284:oidc-provider/token.actions.githubusercontent.com"```
 
 Problem - 3 - some rscs got created others not
             EKS nodes              ✅
