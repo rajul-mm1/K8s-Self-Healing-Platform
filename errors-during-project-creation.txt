@@ -16,3 +16,26 @@ Problem - 3 - some rscs got created others not
             application pods       ❌
 
 Problem - 4 - IAM role authenticates to AWS fine, but EKS/Kubernetes doesn't recognize that identity for cluster access yet
+
+    **check the access entries to the eks = aws eks list-access-entries --cluster-name K8s-Self-Healing-Platform-eks --region us-west-2
+
+    **check associated policies of a particular cluster =
+        aws eks list-associated-access-policies \
+         --cluster-name K8s-Self-Healing-Platform-eks \
+         --principal-arn arn:aws:iam::478815938284:role/K8s-Self-Healing-Platform-github-actions-role \
+         --region us-west-2
+
+    **check the cluster's authentication mode = 
+        aws eks describe-cluster --name K8s-Self-Healing-Platform-eks --region us-west-2 \
+        --query "cluster.accessConfig.authenticationMode" --output text
+
+    **if everything seems perfect, add a debug step = 
+        - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
+
+        - name: Debug cluster auth
+          run: |
+            kubectl version
+            aws --version
+            kubectl auth can-i get pods -A
+            kubectl get nodes

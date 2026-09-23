@@ -77,9 +77,16 @@ jobs:
       
       - name: Debug cluster auth
         run: |
-            kubectl version
-            aws --version
-            kubectl auth can-i get pods -A
+            echo "--- Identity check ---"
+            aws sts get-caller-identity
+
+            echo "--- Kubeconfig exec block ---"
+            cat ~/.kube/config
+
+            echo "--- Manual token generation ---"
+            aws eks get-token --cluster-name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
+
+            echo "--- kubectl attempt ---"
             kubectl get nodes
 
       - name: Helm upgrade
