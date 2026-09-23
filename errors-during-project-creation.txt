@@ -14,3 +14,5 @@ Problem - 3 - some rscs got created others not
             todo-app namespace     ❌
             todo-app Helm release  ❌
             application pods       ❌
+
+Problem - 4 - IAM role authenticates to AWS fine, but EKS/Kubernetes doesn't recognize that identity for cluster access yet

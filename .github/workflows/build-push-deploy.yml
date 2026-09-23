@@ -74,6 +74,13 @@ jobs:
 
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
+      
+      - name: Debug cluster auth
+        run: |
+            kubectl version
+            aws --version
+            kubectl auth can-i get pods -A
+            kubectl get nodes
 
       - name: Helm upgrade
         run: |
