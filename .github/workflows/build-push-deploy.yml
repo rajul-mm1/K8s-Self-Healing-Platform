@@ -96,3 +96,15 @@ jobs:
             --set image.registry="$ECR_REGISTRY" \
             --set image.tag="${{ needs.build-and-push.outputs.image_tag }}" \
             --wait --timeout 5m
+
+      - name: Debug pod status
+        if: failure()
+        run: |
+            echo "--- Helm status ---"
+            helm status todo-app || true
+            echo "--- Pods ---"
+            kubectl get pods -o wide
+            echo "--- Pod descriptions ---"
+            kubectl describe pods -l app.kubernetes.io/instance=todo-app
+            echo "--- Recent events ---"
+            kubectl get events --sort-by='.lastTimestamp' | tail -30
