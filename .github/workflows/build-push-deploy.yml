@@ -12,7 +12,7 @@ permissions:
 
 env:
   AWS_REGION: us-west-2
-  EKS_CLUSTER_NAME: self-healing-k8s-eks
+  EKS_CLUSTER_NAME: K8s-Self-Healing-Platform-eks
 
 jobs:
   build-and-push:
